@@ -10,6 +10,8 @@ EM_ANDAMENTO = 'EM_ANDAMENTO'
 
 class Ponto():
     def __init__(self, x, y, caracter):
+        '''Construtor da classe Ponto
+        '''
         self.caracter = caracter
         self.x = round(x)
         self.y = round(y)
@@ -43,7 +45,7 @@ class Fase():
 
         :param obstaculos:
         """
-        pass
+        self._obstaculos.extend(obstaculos)
 
     def adicionar_porco(self, *porcos):
         """
@@ -51,7 +53,7 @@ class Fase():
 
         :param porcos:
         """
-        pass
+        self._porcos.extend(porcos)
 
     def adicionar_passaro(self, *passaros):
         """
@@ -59,8 +61,9 @@ class Fase():
 
         :param passaros:
         """
-        pass
+        self._passaros.extend(passaros)
 
+    @property
     def status(self):
         """
         Método que indica com mensagem o status do jogo
@@ -73,7 +76,12 @@ class Fase():
 
         :return:
         """
-        return EM_ANDAMENTO
+        if not self.__possui_porco_ativo():
+            return VITORIA
+        elif self.__possui_passaro_ativo():
+            return EM_ANDAMENTO
+        else:
+            return DERROTA
 
     def lancar(self, angulo, tempo):
         """
@@ -104,4 +112,26 @@ class Fase():
 
     def _transformar_em_ponto(self, ator):
         return Ponto(ator.x, ator.y, ator.caracter())
+
+    def __possui_porco_ativo(self):
+        """
+        Return True caso haja algum porco na lista de porcos com status ATIVO,
+        caso retorna False
+        :return: Bool
+        """
+        for porco in self._porcos:
+            if porco.status == ATIVO:
+                return True
+        return False
+
+    def __possui_passaro_ativo(self):
+        """
+        Retorna True caso haja algum pássaro com status ATIVO, caso constrário,
+        retorna False
+        :return: Bool
+        """
+        for passaro in self._passaros:
+            if passaro.status == ATIVO:
+                return True
+        return False
 

@@ -62,7 +62,7 @@ class Obstaculo(Ator):
 
 class Porco(Ator):
     pass
-
+    
 
 class DuploLancamentoExcecao(Exception):
     pass
