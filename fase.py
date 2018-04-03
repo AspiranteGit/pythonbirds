@@ -2,6 +2,7 @@
 from itertools import chain
 from atores import ATIVO
 
+from git_projetos.pythonbirds.atores import DuploLancamentoExcecao
 
 VITORIA = 'VITORIA'
 DERROTA = 'DERROTA'
@@ -24,6 +25,14 @@ class Ponto():
 
     def __repr__(self, *args, **kwargs):
         return "Ponto(%s,%s,'%s')" % (self.x, self.y, self.caracter)
+
+
+class DuploLancamentoExcecao(Exception):
+    def __init__(self):
+        pass
+
+    def __str__(self):
+        return ' '
 
 
 class Fase():
@@ -94,7 +103,10 @@ class Fase():
         :param angulo: ângulo de lançamento
         :param tempo: Tempo de lançamento
         """
-        pass
+        for passaro in self._passaros:
+            if not passaro.foi_lancado():
+                passaro.lancar(angulo, tempo)
+                break
 
 
     def calcular_pontos(self, tempo):

@@ -54,6 +54,10 @@ class PassaroFake(AtorFake):
         self.colidir_com_chao_executado = False
 
     def foi_lancado(self):
+        """
+        Retorna True caso o Ator tenha sido lançado, ou Falso caso não
+        :return: True or False
+        """
         return self._lancado
 
     def lancar(self, angulo, tempo):
@@ -80,14 +84,12 @@ class FaseTestes(TestCase):
 
     def teste_adicionar_porco(self):
         fase = Fase()
-        self.assertListEqual([], fase._porcos)
-        porco = PorcoFake()
-        fase.adicionar_porco(porco)
-        self.assertListEqual([porco], fase._porcos)
-
-        porco1, porco2 = PorcoFake(), PorcoFake()
-        fase.adicionar_porco(porco1, porco2)
-        self.assertListEqual([porco, porco1, porco2], fase._porcos)
+        # Criando três porcos
+        porcos = [PorcoFake(1,1) for _ in range(3)]
+        # Adicionando os três porcos à fase
+        fase.adicionar_porco(*porcos)
+        # Verificando se os três porcos estão na fase
+        self.assertEqual(porcos, fase._porcos)
 
     def teste_adicionar_passaro(self):
         fase = Fase()
@@ -174,9 +176,13 @@ class FaseTestes(TestCase):
                          'Sem porco ativo, o jogo deveria acabar com vitória')
 
     def teste_lancar_passaro_sem_erro_quando_nao_existe_passaro(self):
+        # Criando dois pássaros
         passaros = [PassaroFake(1, 1) for _ in range(2)]
+        # Instanciando a fase
         fase = Fase()
+        # Adicionando a lista de pássaros à fase
         fase.adicionar_passaro(*passaros)
+
         self.assertFalse(passaros[0].foi_lancado())
         self.assertFalse(passaros[1].foi_lancado())
         fase.lancar(90, 1)
